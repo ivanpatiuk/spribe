@@ -1,25 +1,29 @@
 package org.spribe.utils.assertion;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersion;
 import com.networknt.schema.ValidationMessage;
+import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.spribe.utils.JsonMapper;
+import org.spribe.utils.allure.AllureLogger;
 import org.testng.Assert;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.Set;
 
 public class AssertUtil {
 
+    @Step("Validate schema for {0}")
     public static void validateSchema(Object testClass, Response response) {
+        AllureLogger.clearStepParameters();
         var jsonSchemaFactory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4);
         var jsonSchemaFilePath = Path.of(String.format("src/test/resources/schemas/%s.json", getCallerTestMethodName(testClass)));
         try {
             var jsonSchemaFile = Files.readString(jsonSchemaFilePath);
+            AllureLogger.addTestCaseParameters(Map.of("Schema", jsonSchemaFile));
             var jsonSchema = jsonSchemaFactory.getSchema(jsonSchemaFile);
             var jsonNode = JsonMapper.readTree(response);
             var errors = jsonSchema.validate(jsonNode);

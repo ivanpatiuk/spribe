@@ -17,5 +17,9 @@ public class AllureLogger {
                                     .setValue(value)));
         });
     }
+
+    public static void clearStepParameters() {
+        Allure.getLifecycle().updateStep(stepResult -> stepResult.setParameters(null));
+    }
 }
 
