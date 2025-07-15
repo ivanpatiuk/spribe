@@ -2,10 +2,18 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Players",
   "description": "List of players",
-  "type": "array",
-  "items": {
-    "$ref": "#/$defs/PlayerItem"
+  "type": "object",
+  "properties": {
+    "players": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/PlayerItem"
+      }
+    }
   },
+  "required": [
+    "players"
+  ],
   "$defs": {
     "PlayerItem": {
       "type": "object",

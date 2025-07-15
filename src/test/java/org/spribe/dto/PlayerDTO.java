@@ -9,6 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+/*
+ * This class is used for mapping JSON responses into Java objects. As most of the responses from the controller contain
+ * the same fields, it is enough to map them into 1 common object. Optional fields are ignored and are validated by JSON schema validation.
+ */
 public class PlayerDTO {
 
     private Integer age;

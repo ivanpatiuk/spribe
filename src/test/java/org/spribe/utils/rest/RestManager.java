@@ -18,7 +18,7 @@ public class RestManager {
             BASE_URI = "http://3.68.165.45";
         }
         REQUEST_SPECIFICATION = RestAssured.given()
-                .baseUri(baseUriProperty)
+                .baseUri(BASE_URI)
                 .filter(new RestAssuredRequestFilter())
                 .contentType(ContentType.JSON);
     }

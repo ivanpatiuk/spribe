@@ -2,6 +2,7 @@ package org.spribe.utils;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.response.Response;
 import lombok.SneakyThrows;
@@ -44,5 +45,10 @@ public class JsonMapper {
     @SneakyThrows
     public static <T> T map(String json, TypeReference<T> typeReference) {
         return MAPPER.readValue(json, typeReference);
+    }
+
+    @SneakyThrows
+    public static JsonNode readTree(Response response) {
+        return JsonMapper.getMapper().readTree(response.getBody().asString());
     }
 }
