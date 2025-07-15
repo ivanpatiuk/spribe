@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" name="RoutingTest">
+    <Properties>
+        <Property name="baseDir">target/logs</Property>
+    </Properties>
+
+    <Appenders>
+        <Routing name="Routing">
+            <Routes pattern="$${event:ThreadName}">
+                <Route>
+                    <RollingFile name="Rolling-${event:ThreadName}"
+                                 fileName="${baseDir}\thread-${event:ThreadName}.log"
+                                 filePattern="${baseDir}\thread-${event:ThreadName}.log.%d{yyyy-MM-dd}">
+                        <PatternLayout pattern="%d{HH:mm:ss.SSS} %level %C{1.}.%M:%L - %msg%n"/>
+                        <TimeBasedTriggeringPolicy/>
+                    </RollingFile>
+                </Route>
+            </Routes>
+        </Routing>
+        <RollingFile name="fileLogger"
+                     fileName="${baseDir}/all.log"
+                     filePattern="${baseDir}/app-%d{yyyy-MM-dd}.log">
+            <PatternLayout>
+                <pattern>%d{HH:mm:ss.SSS} [thread-%t] %level %C{1.}.%M:%L - %msg%n
+                </pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+        </RollingFile>
+
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout
+                    disableAnsi="false"
+                    pattern="%d{HH:mm:ss.SSS} [thread-%t] %highlight{${LOG_LEVEL_PATTERN:-%5p}}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=blue} %highlight{%C{1.}.%M:%L}{cyan} - %msg%n"/>
+        </Console>
+
+    </Appenders>
+    <Loggers>
+        <Logger name="org.spribe" level="info"/>
+        <Root level="info">
+            <AppenderRef ref="Routing"/>
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="fileLogger"/>
+        </Root>
+    </Loggers>
+</Configuration>
