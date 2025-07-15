@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Players",
+  "description": "List of players",
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/PlayerItem"
+  },
+  "$defs": {
+    "PlayerItem": {
+      "type": "object",
+      "properties": {
+        "age": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 200
+        },
+        "gender": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "integer"
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "screenName": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "age",
+        "gender",
+        "id",
+        "role",
+        "screenName"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
