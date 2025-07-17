@@ -15,7 +15,7 @@ public class RestManager {
         if (baseUriProperty != null && !baseUriProperty.isBlank()) {
             BASE_URI = baseUriProperty;
         } else {
-            BASE_URI = "http://3.68.165.45";
+            BASE_URI = "http://3.68.165.45/player";
         }
         REQUEST_SPECIFICATION = RestAssured.given()
                 .baseUri(BASE_URI)
