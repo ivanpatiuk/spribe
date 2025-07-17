@@ -5,6 +5,7 @@ import com.networknt.schema.SpecVersion;
 import com.networknt.schema.ValidationMessage;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
+import org.spribe.enums.ValidationRule;
 import org.spribe.utils.JsonMapper;
 import org.spribe.utils.allure.AllureLogger;
 import org.testng.Assert;
@@ -33,6 +34,13 @@ public class AssertUtil {
         } catch (Exception e) {
             throw new RuntimeException("Schema file not found by the next path: " + jsonSchemaFilePath);
         }
+    }
+
+    @Step("Validate response for {0}")
+    public static void validateResponse(Response response, Map<String, ValidationRule> fieldRuleMap) {
+        AllureLogger.clearStepParameters();
+        var responseBody = response.getBody().asString();
+        fieldRuleMap.forEach((field, rule) -> rule.getFunction().accept(responseBody, field));
     }
 
     private static String getErrorsDetails(Set<ValidationMessage> errors) {
