@@ -28,7 +28,7 @@ public class FixtureUtil {
                 .response();
         var playerDTOFromResponse = response.as(PlayerDTO.class);
         var id = playerDTO.getId();
-        assertTrue(id >= 0);
+        assertTrue( id != null && id >= 0);
         AssertUtil.assertPlayersEqual(playerDTO, playerDTOFromResponse);
         return id;
     }
@@ -38,8 +38,8 @@ public class FixtureUtil {
                 .basePath(URL.DELETE_PLAYER)
                 .pathParams("editor", editor)
                 .body(PlayerDTO.builder().id(id).build())
+                .delete()
                 .then()
-                .statusCode(200)
-                .response();
+                .statusCode(200);
     }
 }

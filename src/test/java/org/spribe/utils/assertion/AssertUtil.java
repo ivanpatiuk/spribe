@@ -5,7 +5,6 @@ import com.networknt.schema.SpecVersion;
 import com.networknt.schema.ValidationMessage;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.spribe.dto.PlayerDTO;
@@ -18,6 +17,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static org.testng.Assert.assertEquals;
 
@@ -39,27 +40,19 @@ public class AssertUtil {
         assertEquals(expected.getScreenName(), actual.getGender());
     }
 
-    public void validate(RequestSpecification createFixtureRequest, RequestSpecification deleteFixtureRequest, Runnable assertFunction) {
-        Integer id = null;
+    public static void validate(Supplier<Long> createFixtureFunction, Consumer<Long> deleteFixtureFunction, Consumer<Long> assertFunction) {
+        Long id = null;
         try {
             try {
-                id = createFixtureRequest
-                        .post()
-                        .then()
-                        .statusCode(200)
-                        .extract().response()
-                        .jsonPath()
-                        .get("$.id");
-                if (id == null) {
-                    throw new IllegalArgumentException("Id was null for created player");
-                }
+                id = createFixtureFunction.get();
             } catch (Exception e) {
                 log.fatal("Unable to create fixture", e);
+                throw e;
             }
-            assertFunction.run();
+            assertFunction.accept(id);
         } finally {
             if (id != null) {
-                deleteFixtureRequest.delete().then().statusCode(200);
+                deleteFixtureFunction.accept(id);
             }
         }
     }
